@@ -5,7 +5,10 @@
 
 class Object {
     public:
-        Object();
+        Object() = delete;
+
+    protected:
+        Object(const Vec3<float>& _pos, const Entity& _entity);
         virtual ~Object() noexcept;
 
     private:
@@ -17,5 +20,8 @@ class Object {
         Entity mEntity = { };
 };
 
-Object::Object() { }
+Object::Object(const Vec3<float>& _pos, const Entity& _entity)
+    : mPos{_pos}
+    , mEntity{_entity}
+{ }
 Object::~Object() noexcept { }
