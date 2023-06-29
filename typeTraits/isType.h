@@ -47,6 +47,7 @@ template <typename T> constexpr bool isReference = typeBase::isLvalueReference<T
 template <typename T> constexpr bool isLvalueReference = typeBase::isLvalueReference<T>;
 template <typename T> constexpr bool isRvalueReference = typeBase::isRvalueReference<T>;
 template <typename T> constexpr bool isPointer = typeBase::isPointer<removeConst<T>>;
+template <typename T> constexpr bool isArray = typeBase::isArray<T>;
 
 template <typename T> constexpr bool isFloat = typeBase::isFloat<removeCR<T>>;
 template <typename T> constexpr bool isSignedInteger = typeBase::isSignedInteger<removeCR<T>>;
@@ -55,5 +56,3 @@ template <typename T> constexpr bool isSigned = typeBase::isSignedInteger<T> || 
 template <typename T> constexpr bool isInteger = typeBase::isSignedInteger<T> || typeBase::isUnsigned<T>;
 
 template <typename T> constexpr bool isArithmetic = isFloat<T> || isInteger<T>;
-
-template <typename T> constexpr bool isArray = typeBase::isArray<T>;
