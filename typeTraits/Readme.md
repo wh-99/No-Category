@@ -1,15 +1,19 @@
 ### isConst<T>
-isConst<const int&>      : 1
-isConst<const int&&>     : 1
-isConst<const int*>      : 0    // 가리키는 포인터를 변경할 수 있으므로 False
-isConst<const int* const>: 1
+
+1. isConst<const int&>      : 1
+2. isConst<const int&&>     : 1
+3. isConst<const int*>      : 0    // 가리키는 포인터를 변경할 수 있으므로 False
+4. isConst<const int* const>: 1
 ---
+
 ### isReference<T>
+
 isReference<int&>       : 1
 isReference<int&&>      : 1
 isReference<const int&> : 1
 isReference<const int&&>: 1
 ---
+
 isPointer<int*>                    : 1
 isPointer<const int*>              : 1
 isPointer<const int* const>        : 1
