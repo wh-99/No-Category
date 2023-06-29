@@ -15,7 +15,7 @@ namespace typeBase {
     template <typename T> constexpr bool isLvalueReference     = false;
     template <typename T> constexpr bool isLvalueReference<T&> = true;
 
-    template <typename T> constexpr bool isRvalueReference     = false;
+    template <typename T> constexpr bool isRvalueReference      = false;
     template <typename T> constexpr bool isRvalueReference<T&&> = true;
 
     template <typename T> constexpr bool isFloat    = false;
@@ -36,6 +36,10 @@ namespace typeBase {
     template <> constexpr bool isSignedInteger<int>       = true;
     template <> constexpr bool isSignedInteger<long>      = true;
     template <> constexpr bool isSignedInteger<long long> = true;
+
+    template <typename T, unsigned long long N = 0> constexpr bool isArray   = false;
+    template <typename T, unsigned long long N> constexpr bool isArray<T[N]> = true;
+    template <typename T>                       constexpr bool isArray<T[]>  = true;
 }
 
 template <typename T> constexpr bool isConst = typeBase::isConst<removeReference<T>>;
@@ -44,10 +48,12 @@ template <typename T> constexpr bool isLvalueReference = typeBase::isLvalueRefer
 template <typename T> constexpr bool isRvalueReference = typeBase::isRvalueReference<T>;
 template <typename T> constexpr bool isPointer = typeBase::isPointer<removeConst<T>>;
 
-template <typename T> constexpr bool isFloat = typeBase::isFloat<removeConst<removeReference<T>>>;
-template <typename T> constexpr bool isSignedInteger = typeBase::isSignedInteger<removeConst<removeReference<T>>>;
-template <typename T> constexpr bool isUnsigned = typeBase::isUnsigned<removeConst<removeReference<T>>>;
+template <typename T> constexpr bool isFloat = typeBase::isFloat<removeCR<T>>;
+template <typename T> constexpr bool isSignedInteger = typeBase::isSignedInteger<removeCR<T>>;
+template <typename T> constexpr bool isUnsigned = typeBase::isUnsigned<removeCR<T>>;
 template <typename T> constexpr bool isSigned = typeBase::isSignedInteger<T> || typeBase::isFloat<T>;
 template <typename T> constexpr bool isInteger = typeBase::isSignedInteger<T> || typeBase::isUnsigned<T>;
 
 template <typename T> constexpr bool isArithmetic = isFloat<T> || isInteger<T>;
+
+template <typename T> constexpr bool isArray = typeBase::isArray<T>;

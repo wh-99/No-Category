@@ -14,3 +14,5 @@ namespace removeBase {
 
 template <typename T> using removeConst = typename removeBase::removeConst<T>::type;
 template <typename T> using removeReference = typename removeBase::removeReference<T>::type;
+
+template <typename T> using removeCR = typename removeBase::removeConst<removeReference<T>>::type;
