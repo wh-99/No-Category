@@ -1,37 +1,49 @@
 #pragma once
 
 /*  TODO LIST
-        1. add SFINAE to abs (isArithmetic)
-        2. search about sqrt func. how to improve the speed
-        3. ERR CHECKS x != 0 -> toRad, toDeg, sqrt
-        4. add invSqrt (Quake3)
-        5. add Trigonometrics
+        1. ERR CHECKS x != 0 -> sqrt
+        2. add Trigonometrics
 */
 
+#include "../typeTraits/isType.h"
+#include "../typeTraits/typeCondition.h"
+
 namespace Math {
-    #define PI static_cast<double>(3.141592653589793);
+    constexpr float PI = 3.141592;
+    constexpr float E = 2.718282;
 
-    #define SQUARE(X) ((X) * (X))
+    template <typename T, typename = enableIF<isArithmetic<T>>> constexpr T abs(const T& _val) {
+        if constexpr (isFloat<T>) {
+            T result = _val;
 
-    template <typename T> constexpr T abs(const T& _val) { return (_val < 0 ? -_val : _val); }
-    template <typename T> constexpr double toRad(const double& _deg) {
-        constexpr double RAD = 0.017453292519943;
+            if constexpr (isSame<T, float>)
+                *((unsigned int*)&result) &= 0x7FFFFFFF;
 
-        return RAD * _deg;
+            else if constexpr (isSame<T, double>)
+                *((unsigned long long*)&result) &= 0x7FFFFFFFFFFFFFFF;
+
+            else {
+                // long double
+            }
+
+            return result;
+        }
+
+        else
+            return (_val < 0 ? -_val : _val);
     }
-    template <typename T> constexpr double toDeg(const double& _rad) {
-        constexpr double DEG = 57.295779513082325;
+    template <typename T> constexpr T square(const T& _val) { return _val * _val; }
 
-        return DEG * _rad;
-    }
+    template <typename T> constexpr float toRad(const float& _deg) { return _deg * 0.0174533; }   // PI / 180 = 0.017453292519943
+    template <typename T> constexpr float toDeg(const float& _rad) { return _rad * 57.295779; }  // 180 / PI = 57.295779513082325
 
-    constexpr double sqrt(const double& _x) {     // Babylonian method
+    float sqrt(const float& _x, const float& precision = 0.0001f) {   // Babylonian method
         double estimate = _x;
 
         while (true) {
             double next_estimate = 0.5 * (estimate + _x / estimate);
 
-            if (abs(next_estimate - estimate) < 0.0001)
+            if (abs(next_estimate - estimate) < precision)
                 break;
 
             estimate = next_estimate;
@@ -39,4 +51,5 @@ namespace Math {
 
         return estimate;
     }
+    float invSqrt(const float& _x) { return 1 / sqrt(_x); }
 }
